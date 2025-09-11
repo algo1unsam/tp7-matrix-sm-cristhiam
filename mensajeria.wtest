@@ -2,7 +2,30 @@ import mensajeria.*
 import mensajeros.*
 
 
-describe "2 " {}
+describe "2 " {
+test "agrego mesajero"{
+    mensajeria.agregarMensajero(morfeo)
+    assert.equals(mensajeria.mensajeros().size(),1)
+}
+test "elimino mesajero"{
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.eliminarMensajero(morfeo)
+    assert.equals(mensajeria.mensajeros().size(),1)
+}
+test "elimino a todos"{
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(triniti)
+    mensajeria.eliminarATodo()
+    assert.equals(mensajeria.mensajeros().size(),0)
+}
+  test " la mensajería es grande "{
+	mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(triniti)
+	assert.that(mensajeria.esGrande())
+    }
 
-
+}
 describe "3 " {}
