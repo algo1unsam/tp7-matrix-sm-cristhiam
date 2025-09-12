@@ -54,6 +54,12 @@ describe "Test de mensajeros primera parte " {
         camion.acoplados(3)
 	    assert.notThat(paquete.puedeSerEntregadoPor(morfeo))
     }
+
+		test "triniti va a matrix"{
+		paquete.pagar()
+		paquete.destino (matrix)
+	    assert.notThat(paquete.puedeSerEntregadoPor(trinity))
+    }
 }
 
 
