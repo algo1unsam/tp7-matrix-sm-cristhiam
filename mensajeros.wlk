@@ -10,7 +10,11 @@ object trinity {
     var property puedeLlamar = true
     method peso() =  kgtrinity
 }
-
+object smith {
+    var property kgsmith = 75
+    var property puedeLlamar = true
+    method peso() =  kgsmith
+}
 object neo {
     var property kgneo = 0
     var property credito = true
@@ -43,6 +47,7 @@ object paquete {
     method puedeEntregar(mensajero) = ((destino.dejarPasar(mensajero) and pago))
 }
 object paquetito {
+    var property precio = 0
     var property pago = true
     method puedeEntregar(mensajero) = true
 }
@@ -50,11 +55,12 @@ object paquetito {
 
 object paquetonViajero {
     const property destinos = #{}
-    var property precio  = 100
-    var property total = 0
+    var  property total = 0
+    var property costoLugar = 100 
+    method precio() = costoLugar * destinos.size()
     method agregarDestinos(lugar) { 
         destinos.add(lugar)
-       total = precio * destinos.size()
+       total = costoLugar * destinos.size()
     }
     method pagar(pago) { total = total - pago}
    // para enviarce debe estar pagodo totalmente
