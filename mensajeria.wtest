@@ -2,7 +2,262 @@ import mensajeria.*
 import mensajeros.*
 
 
-describe "2 " {}
+describe "2 " {
+test "agrego mesajero"{
+    mensajeria.agregarMensajero(smith)
+    assert.equals(mensajeria.mensajeros().size(),1)
+}
+test "elimino mesajero"{
+    mensajeria.agregarMensajero(smith)
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.eliminarMensajero(morfeo)
+    assert.equals(mensajeria.mensajeros().size(),1)
+}
+test "elimino a todos"{
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(trinity)
+    mensajeria.agregarMensajero(smith)
+    mensajeria.eliminarATodo()
+    assert.equals(mensajeria.mensajeros().size(),0)
+}
+  test " la mensajería es grande "{
+	mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(trinity)
+	assert.that(mensajeria.esGrande())
+    }
+
+  test " Puede ser entregado por el primero "{
+    mensajeria.agregarMensajero(morfeo)
+	mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    paquete.pagar()
+    mensajeria.primeroPuedeEntregar()
+	assert.that(mensajeria.primeroPuedeEntregar())
+    }
+
+    test " smith puede entregar un pauqete "{
+    mensajeria.agregarMensajero(smith)
+    paquete.pagar()
+    mensajeria.primeroPuedeEntregar()
+	  assert.that(mensajeria.primeroPuedeEntregar())
+    }
+  test " cuanto pesa por el ultimo "{    
+    mensajeria.agregarMensajero(morfeo)
+	mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    assert.equals(mensajeria.ultimaCuantoPesa(),900)
+    }
+}
+describe "3 " {
+  test "se puede entregar el paquetito "{
+    mensajeria.agregarMensajero(morfeo)
+	mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    assert.that(mensajeria.puedeEntregar(paquetito))
+    }
+
+  test "alguno puede entregar el paquete  "{
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    paquete.pagar()
+    assert.that(mensajeria.puedeEntregar(paquete))
+    }// no se por que aca me da  "✓ 0 passed" aun que cuando lo pruevo por partes con cada uno de los mensajeros 
+    // haciendolo por el terminal me da lo se esperaria que es un true
+
+  test " no pueden enteregar el paqueton por que no se pago completo"{
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    paquetonViajero.agregarDestinos(puente)
+    paquetonViajero.pagar(99)
+    assert.notThat(mensajeria.puedeEntregar(paquetonViajero))
+    }
+    
+  test " si pueden enteregar el paqueton"{
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    paquetonViajero.agregarDestinos(puente)
+    paquetonViajero.pagar(100)
+   assert.that(mensajeria.puedeEntregar(paquetonViajero))
+}
+
+  test " quienes pueden llevar un paquetito"{
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+
+   assert.equals([morfeo,neo,trinity],mensajeria.llevarPaquete(paquetito))
+}
+  test " quienes pueden llevar un paquete"{
+    mensajeria.agregarMensajero(morfeo)
+    camion.acoplados(2)
+    paquete.pagar()
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+   assert.equals([neo,trinity],mensajeria.llevarPaquete(paquete))
+}
+  test " quienes pueden llevar un paquetonViajero"{
+    paquetonViajero.agregarDestinos(matrix)
+    paquetonViajero.pagar(100)
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+   assert.equals([neo,trinity],mensajeria.llevarPaquete(paquetonViajero))
+}
+
+  test " el promedio de peso es mayor a 500 "{
+    mensajeria.agregarMensajero(morfeo)
+    morfeo.kgMorfeo(110) //le agrego peso porque lo tengo como que pesa 90 y el premedio no llega
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+   assert.that(mensajeria.sobrepeso())
+}
+
+  test " el promedio de peso es menor a 500 "{
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+   assert.notThat(mensajeria.sobrepeso())
+}
+
+  test "enviar paquete por alquien "{
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    paquete.pagar()
+    mensajeria.enviarPaquete(paquete)
+    assert.equals([morfeo,neo,trinity],mensajeria.mensajerosDisponibles())
+    assert.equals(0,mensajeria.paquetesPendientes().size())
+}
+
+  test "no lo pueden enviar ninguno "{
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    paquetonViajero.agregarDestinos(puente)
+    mensajeria.enviarPaquete(paquetonViajero)
+    assert.equals([],mensajeria.mensajerosDisponibles())
+    assert.equals(1,mensajeria.paquetesPendientes().size())
+}
+
+  test "ganacias por enviar un paquete de cada uno "{ // paquete 50 + paquetito 0 + paqueton con 2 destino 200 = 250
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    paquetonViajero.agregarDestinos(puente)
+    paquetonViajero.agregarDestinos(matrix)
+     paquete.pagar()
+    paquetonViajero.pagar(200)
+    mensajeria.enviarPaquete(paquetonViajero)
+    paquete.pagar()
+    mensajeria.enviarPaquete(paquete)
+    mensajeria.enviarPaquete(paquetito)
+    assert.equals(250,mensajeria.totalGanado())
+}
+ test "enviar conjunto de cajas "{ 
+    mensajeria.agregarMensajero(morfeo)
+    mensajeria.agregarMensajero(neo)
+    mensajeria.agregarMensajero(trinity)
+    paquetonViajero.agregarDestinos(puente)
+    paquetonViajero.agregarDestinos(matrix)
+    paquete.pagar()
+    paquetonViajero.pagar(200)
+    mensajeria.enviarConjunto(#{paquetonViajero,paquete,paquetito})
+    assert.equals(250,mensajeria.totalGanado()) 
+  }
+   test "paquetes pendientes "{ 
+    mensajeria.agregarMensajero(morfeo)
+    paquetonViajero.agregarDestinos(matrix)
+    mensajeria.enviarPaquete(paquetonViajero)
+    paquete.destino(puente)
+    mensajeria.enviarPaquete(paquete)
+    paquete.pagar()
+    mensajeria.pendiente()
+    paquetonViajero.pagar(100)
+    mensajeria.pendiente()
+    assert.equals(0,mensajeria.paquetesPendientes().size()) 
+    assert.equals(150,mensajeria.totalGanado())
+    }
+}
+describe "test para smith" {
+  test "agrego mesajero"{
+      mensajeria.agregarMensajero(smith)
+      assert.equals(mensajeria.mensajeros().size(),1)
+  }
+  test "elimino smith"{
+      mensajeria.agregarMensajero(smith)
+      mensajeria.agregarMensajero(morfeo)
+      mensajeria.eliminarMensajero(smith)
+      assert.notThat(mensajeria.mensajeros().contains(smith))
+  }
+
+    test "smith puede entregar el paquetito "{
+      mensajeria.agregarMensajero(smith)
+      assert.that(mensajeria.puedeEntregar(paquetito))
+      }
+
+    test "smith puede entregar el paquete  "{
+      mensajeria.agregarMensajero(smith)
+      paquete.pagar()
+      assert.that(mensajeria.puedeEntregar(paquete))
+      }
+    test " smith no pueden enteregar el paqueton porque no se pago completo"{
+      mensajeria.agregarMensajero(smith)
+      paquetonViajero.agregarDestinos(puente)
+      paquetonViajero.pagar(99)
+      assert.notThat(mensajeria.puedeEntregar(paquetonViajero))
+      }
+      
+    test " smith pueden enteregar el paqueton"{
+      mensajeria.agregarMensajero(smith)
+      paquetonViajero.agregarDestinos(puente)
+      paquetonViajero.pagar(100)
+    assert.that(mensajeria.puedeEntregar(paquetonViajero))
+  }
+    test " el promedio de peso es menor a 500 con smith"{
+      mensajeria.agregarMensajero(morfeo)
+      mensajeria.agregarMensajero(smith)
+      mensajeria.agregarMensajero(neo)
+      mensajeria.agregarMensajero(trinity)
+    assert.notThat(mensajeria.sobrepeso())
+  }
+    test "no lo pueden enviar ninguno  ni smith "{
+      mensajeria.agregarMensajero(morfeo)
+      mensajeria.agregarMensajero(neo)
+      mensajeria.agregarMensajero(trinity)
+      mensajeria.agregarMensajero(smith)
+      paquetonViajero.agregarDestinos(puente)
+      mensajeria.enviarPaquete(paquetonViajero)
+      assert.equals([],mensajeria.mensajerosDisponibles())
+      assert.equals(1,mensajeria.paquetesPendientes().size())
+  }
 
 
-describe "3 " {}
+  test "enviar conjunto de cajas y smith las envia "{ 
+      mensajeria.agregarMensajero(smith)
+      paquetonViajero.agregarDestinos(puente)
+      paquetonViajero.agregarDestinos(matrix)
+      paquete.pagar()
+      paquetonViajero.pagar(200)
+      mensajeria.enviarConjunto(#{paquetonViajero,paquete,paquetito})
+      assert.equals(250,mensajeria.totalGanado()) 
+      }
+    test "paquetes pendientes "{ 
+      mensajeria.agregarMensajero(smith)
+      paquetonViajero.agregarDestinos(matrix)
+      mensajeria.enviarPaquete(paquetonViajero)
+      paquete.destino(puente)
+      mensajeria.enviarPaquete(paquete)
+      paquete.pagar()
+      mensajeria.pendiente()
+      paquetonViajero.pagar(100)
+      mensajeria.pendiente()
+      assert.equals(0,mensajeria.paquetesPendientes().size())
+      assert.equals(150,mensajeria.totalGanado())
+      }
+
+ }
